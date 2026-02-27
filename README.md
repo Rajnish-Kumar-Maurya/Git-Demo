@@ -1,5 +1,5 @@
 # Git-Demo
 Understanding the git and github
 <br>
-Rajnish kumar maurya the great
+Rajnish kumar maurya 
 
