@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiery Rainbow Calculator</title>
+    <!-- Tailwind CSS CDN for utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for 'Inter' -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for the fiery background, 3D effects, and rainbow animations */
+
+        /* Apply Inter font and set up the fiery background */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+            overflow: hidden; /* Prevent scrolling due to background animation */
+            background:
+                /* Multiple radial gradients to create a fiery, swirling effect */
+                radial-gradient(circle at 10% 20%, rgba(255, 100, 0, 0.6) 0%, transparent 40%), /* Orange */
+                radial-gradient(circle at 90% 80%, rgba(255, 150, 0, 0.6) 0%, transparent 40%), /* Lighter Orange */
+                radial-gradient(circle at 50% 50%, rgba(255, 50, 0, 0.6) 0%, transparent 50%), /* Red */
+                radial-gradient(circle at 30% 70%, rgba(139, 69, 19, 0.6) 0%, transparent 40%), /* Brown */
+                radial-gradient(circle at 70% 30%, rgba(165, 42, 42, 0.6) 0%, transparent 40%), /* Dark Red */
+                #333; /* Dark base color */
+            background-size: 200% 200%; /* Make gradients larger than viewport for movement */
+            animation: fireBackground 20s infinite alternate; /* Animate background position */
+        }
+
+        /* Keyframes for the fiery background animation */
+        @keyframes fireBackground {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        /* Calculator container styling */
+        .calculator-container {
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background */
+            border-radius: 20px; /* Rounded corners for the main box */
+            padding: 25px;
+            /* 3D box-shadow effect from up-right side */
+            box-shadow:
+                -10px -10px 20px rgba(255, 255, 255, 0.1), /* Light source from top-left */
+                10px 10px 30px rgba(0, 0, 0, 0.8), /* Shadow from bottom-right */
+                inset 5px 5px 10px rgba(255, 255, 255, 0.05), /* Inner light for depth */
+                inset -5px -5px 10px rgba(0, 0, 0, 0.5); /* Inner dark for depth */
+            position: relative;
+            z-index: 10; /* Ensure it's above the background */
+            border: 2px solid rgba(255, 165, 0, 0.5); /* Subtle orange border */
+            width: 100%; /* Make it responsive */
+            max-width: 400px; /* Max width for desktop */
+        }
+
+        /* Calculator display styling */
+        .calculator-display {
+            background-color: rgba(0, 0, 0, 0.9); /* Darker background for display */
+            color: #fff; /* White text */
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-align: right;
+            overflow-x: auto; /* Allow horizontal scrolling for long numbers */
+            white-space: nowrap; /* Prevent numbers from wrapping */
+            box-shadow: inset 0 0 10px rgba(255, 165, 0, 0.7); /* Orange glow effect */
+            border: 1px solid rgba(255, 165, 0, 0.3);
+        }
+
+        /* Button grid layout */
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 columns, equal width */
+            gap: 15px; /* Spacing between buttons */
+        }
+
+        /* Individual button styling */
+        .calculator-button {
+            background-color: rgba(50, 50, 50, 0.8); /* Dark grey background */
+            color: #fff;
+            padding: 20px;
+            border-radius: 15px; /* Rounded corners for buttons */
+            font-size: 1.8em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer; /* Pointer cursor on hover */
+            user-select: none; /* Prevent text selection */
+            transition: all 0.2s ease; /* Smooth transitions for hover/active states */
+            position: relative; /* Needed for pseudo-element positioning */
+            overflow: hidden; /* Crucial for containing the rainbow stripline */
+            /* 3D box-shadow for buttons */
+            box-shadow:
+                -5px -5px 10px rgba(255, 255, 255, 0.05), /* Light from top-left */
+                5px 5px 15px rgba(0, 0, 0, 0.7), /* Shadow from bottom-right */
+                inset 2px 2px 5px rgba(255, 255, 255, 0.02), /* Inner light */
+                inset -2px -2px 5px rgba(0, 0, 0, 0.4); /* Inner dark */
+            border: 1px solid rgba(255, 165, 0, 0.2); /* Subtle orange border */
+        }
+
+        /* Button active (click) state */
+        .calculator-button:active {
+            transform: translateY(2px); /* Slight press down effect */
+            box-shadow:
+                -2px -2px 2px rgba(255, 255, 255, 0.02),
+                2px 2px 5px rgba(0, 0, 0, 0.5),
+                inset 1px 1px 3px rgba(255, 255, 255, 0.01),
+                inset -1px -1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Rainbow stripline effect using a pseudo-element */
+        .calculator-button::before {
+            content: '';
+            position: absolute;
+            /* Cover the entire button area with the pseudo-element */
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            /* Rainbow gradient background */
+            background: linear-gradient(
+                60deg, /* Angle of the gradient */
+                #ff0000, /* Red */
+                #ff7f00, /* Orange */
+                #ffff00, /* Yellow */
+                #00ff00, /* Green */
+                #0000ff, /* Blue */
+                #4b0082, /* Indigo */
+                #9400d3  /* Violet */
+            );
+            background-size: 200% 200%; /* Make gradient larger than pseudo-element for movement */
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.3s ease; /* Smooth fade in/out */
+            z-index: -1; /* Place behind the button content */
+            filter: brightness(1.5); /* Make the rainbow colors brighter */
+            animation: rainbowStripe 2s linear infinite; /* Continuous animation */
+        }
+
+        /* Show rainbow stripline on hover or when 'active-rainbow' class is present */
+        .calculator-button:hover::before,
+        .calculator-button.active-rainbow::before {
+            opacity: 1;
+        }
+
+        /* Keyframes for the rainbow stripline animation */
+        @keyframes rainbowStripe {
+            0% { background-position: 0% 0%; transform: rotate(0deg); } /* Start position and rotation */
+            100% { background-position: 100% 100%; transform: rotate(360deg); } /* End position and full rotation */
+        }
+
+        /* Specific styling for operator buttons */
+        .operator {
+            background-color: rgba(255, 165, 0, 0.7); /* Orange for operators */
+        }
+
+        /* Specific styling for equals button */
+        .equals {
+            background-color: rgba(0, 128, 0, 0.7); /* Green for equals */
+        }
+
+        /* Specific styling for clear button */
+        .clear {
+            background-color: rgba(200, 0, 0, 0.7); /* Red for clear */
+        }
+
+        /* Specific styling for backspace button */
+        .backspace {
+            background-color: rgba(100, 100, 100, 0.7); /* Grey for backspace */
+        }
+
+        /* Specific styling for percentage button */
+        .percentage {
+            background-color: rgba(100, 100, 100, 0.7); /* Grey for percentage */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 600px) {
+            .calculator-container {
+                width: 95%; /* Adjust width for mobile */
+                padding: 15px;
+            }
+            .calculator-display {
+                font-size: 2em;
+                padding: 10px 15px;
+            }
+            .calculator-button {
+                padding: 15px;
+                font-size: 1.5em;
+            }
+            .calculator-buttons {
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <!-- Calculator display area -->
+        <div class="calculator-display" id="display">0</div>
+        <!-- Calculator buttons grid -->
+        <div class="calculator-buttons">
+            <!-- Row 1: Clear, Backspace, Percentage, Division -->
+            <button class="calculator-button clear" data-value="C">C</button>
+            <button class="calculator-button backspace" data-value="backspace">&#x232B;</button> <!-- Unicode for backspace -->
+            <button class="calculator-button percentage" data-value="%">%</button>
+            <button class="calculator-button operator" data-value="/"> &divide; </button>
+
+            <!-- Row 2: Numbers 7, 8, 9 and Multiplication operator -->
+            <button class="calculator-button" data-value="7">7</button>
+            <button class="calculator-button" data-value="8">8</button>
+            <button class="calculator-button" data-value="9">9</button>
+            <button class="calculator-button operator" data-value="*"> &times; </button>
+
+            <!-- Row 3: Numbers 4, 5, 6 and Subtraction operator -->
+            <button class="calculator-button" data-value="4">4</button>
+            <button class="calculator-button" data-value="5">5</button>
+            <button class="calculator-button" data-value="6">6</button>
+            <button class="calculator-button operator" data-value="-">-</button>
+
+            <!-- Row 4: Numbers 1, 2, 3 and Addition operator -->
+            <button class="calculator-button" data-value="1">1</button>
+            <button class="calculator-button" data-value="2">2</button>
+            <button class="calculator-button" data-value="3">3</button>
+            <button class="calculator-button operator" data-value="+">+</button>
+
+            <!-- Row 5: Number 0, Decimal point, and Equals button (filling remaining space) -->
+            <button class="calculator-button" data-value="0">0</button>
+            <button class="calculator-button" data-value=".">.</button>
+            <button class="calculator-button equals" data-value="=" style="grid-column: span 2;">=</button>
+        </div>
+    </div>
+
+    <script>
+        // Get references to the display and all buttons
+        const display = document.getElementById('display');
+        const buttons = document.querySelectorAll('.calculator-button');
+
+        // Calculator state variables
+        let currentInput = '0'; // Stores the number currently being entered or displayed
+        let operator = null;     // Stores the selected operator (+, -, *, /)
+        let previousInput = '';  // Stores the first operand for calculation
+        let resetDisplay = false; // Flag to indicate if the display should be reset for a new number
+
+        /**
+         * Updates the calculator display with the currentInput value.
+         */
+        function updateDisplay() {
+            // If an operator is selected and we're about to enter the second number,
+            // or if we are actively entering the second number, show the full expression.
+            if (operator !== null && previousInput !== '' && resetDisplay) {
+                display.textContent = previousInput + ' ' + operator;
+            } else if (operator !== null && previousInput !== '') {
+                display.textContent = previousInput + ' ' + operator + ' ' + currentInput;
+            }
+            // Otherwise (initial state, after clear, or after calculation), just show the current input.
+            else {
+                display.textContent = currentInput;
+            }
+        }
+
+        /**
+         * Resets all calculator state variables to their initial values.
+         */
+        function clearCalculator() {
+            currentInput = '0';
+            operator = null;
+            previousInput = '';
+            resetDisplay = false;
+            updateDisplay(); // Update display to show '0'
+        }
+
+        /**
+         * Handles the backspace operation, removing the last digit from currentInput.
+         */
+        function backspace() {
+            if (currentInput.length > 1) {
+                currentInput = currentInput.slice(0, -1); // Remove last character
+            } else {
+                currentInput = '0'; // If only one digit, set to '0'
+            }
+            updateDisplay();
+        }
+
+        /**
+         * Handles the percentage operation.
+         * Converts the current input to a percentage (divides by 100).
+         */
+        function applyPercentage() {
+            let value = parseFloat(currentInput);
+            if (!isNaN(value)) {
+                currentInput = (value / 100).toString();
+                updateDisplay();
+            }
+        }
+
+        /**
+         * Appends a number or decimal point to the current input.
+         * @param {string} number The digit or decimal point to append.
+         */
+        function appendNumber(number) {
+            // If resetDisplay is true (e.g., after an operation or equals), start a new number
+            if (resetDisplay) {
+                currentInput = number;
+                resetDisplay = false;
+            } else {
+                // If current input is '0' and a non-decimal number is pressed, replace '0'
+                if (currentInput === '0' && number !== '.') {
+                    currentInput = number;
+                }
+                // Prevent multiple decimal points
+                else if (number === '.' && currentInput.includes('.')) {
+                    return; // Do nothing if decimal already exists
+                }
+                // Append the number to the current input
+                else {
+                    currentInput += number;
+                }
+            }
+            updateDisplay(); // Update the display
+        }
+
+        /**
+         * Handles operator selection.
+         * If an operator is already selected and there's a previous input, it calculates the result first.
+         * @param {string} nextOperator The operator selected by the user.
+         */
+        function chooseOperator(nextOperator) {
+            if (currentInput === '') return; // Do nothing if no number is entered
+
+            // If a previous input and operator exist, calculate before setting new operator
+            if (previousInput !== '' && operator !== null) {
+                calculate();
+            }
+
+            operator = nextOperator;     // Set the new operator
+            previousInput = currentInput; // Store current input as the first operand
+            resetDisplay = true;         // Prepare to reset display for the next number
+            updateDisplay(); // Call updateDisplay here to show the operator immediately
+        }
+
+        /**
+         * Performs the calculation based on the stored operator and operands.
+         */
+        function calculate() {
+            let result;
+            const prev = parseFloat(previousInput); // Convert previous input to a float
+            const current = parseFloat(currentInput); // Convert current input to a float
+
+            // If either operand is not a number, do nothing
+            if (isNaN(prev) || isNaN(current)) return;
+
+            // Perform calculation based on the operator
+            switch (operator) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case '*':
+                    result = prev * current;
+                    break;
+                case '/':
+                    // Handle division by zero
+                    if (current === 0) {
+                        currentInput = 'Error';
+                        updateDisplay();
+                        clearCalculator(); // Reset calculator after showing error
+                        return;
+                    }
+                    result = prev / current;
+                    break;
+                default:
+                    return; // Do nothing if no valid operator
+            }
+            currentInput = result.toString(); // Update current input with the result
+            operator = null;                  // Clear the operator
+            previousInput = '';               // Clear the previous input
+            resetDisplay = true;              // Prepare to reset display for next operation
+            updateDisplay();                  // Update the display with the result
+        }
+
+        // Add event listeners to all calculator buttons
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.dataset.value; // Get the data-value attribute of the button
+
+                // Add 'active-rainbow' class on click to trigger rainbow animation
+                button.classList.add('active-rainbow');
+                // Remove the class after a short delay to make the animation temporary on click
+                setTimeout(() => {
+                    button.classList.remove('active-rainbow');
+                }, 500); // 0.5 seconds
+
+                // Handle button actions based on their value
+                if (value === 'C') {
+                    clearCalculator();
+                } else if (value === 'backspace') {
+                    backspace();
+                } else if (value === '%') {
+                    applyPercentage();
+                } else if (value === '=') {
+                    calculate();
+                } else if (['+', '-', '*', '/'].includes(value)) {
+                    chooseOperator(value);
+                } else {
+                    appendNumber(value);
+                }
+            });
+
+            // Add hover effect for the rainbow stripline
+            button.addEventListener('mouseenter', () => {
+                button.classList.add('active-rainbow');
+            });
+
+            button.addEventListener('mouseleave', () => {
+                // Only remove the class if it's not currently active from a click
+                // This prevents the rainbow from disappearing immediately after a click if the mouse moves off
+                if (!button.classList.contains('active-rainbow')) {
+                    button.classList.remove('active-rainbow');
+                }
+            });
+        });
+
+        // Initialize the display when the page loads
+        updateDisplay();
+    </script>
+</body>
+</html>
